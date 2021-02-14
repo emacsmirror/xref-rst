@@ -1,11 +1,12 @@
-
-********
+########
 XRef RST
-********
+########
 
 This package provides a reStructuredText back-end for Emacs ``Xref``.
 
 This means you can look-up links under the cursor as well as finding references to link targets.
+
+Available via `melpa <https://melpa.org/#/xref-rst>`__.
 
 
 Motivation
