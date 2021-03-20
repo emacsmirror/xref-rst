@@ -39,6 +39,7 @@
 (require 'thingatpt) ;; For `thing-at-point-looking-at'.
 (require 'vc) ;; For `vc-backend' and related functions.
 (require 'xref) ;; For `xref' integration.
+(require 'map) ;; For `map-elt'.
 
 
 ;; ---------------------------------------------------------------------------
