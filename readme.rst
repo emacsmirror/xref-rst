@@ -39,8 +39,15 @@ This can be enabled using ``xref-rst-mode`` (a buffer-local minor-mode), for exa
        (xref-rst-mode)))
 
 
+Customization
+-------------
+
+``rst-find-in-project-extensions`` (``'(".rst" ".txt")``)
+   A list of literal file extensions to search.
+
+
 Details
--------
+=======
 
 - The projects root is detected by searching for ``conf.py`` (used by Sphinx),
   otherwise version control is used to find the root.
@@ -48,11 +55,3 @@ Details
 - Files and directories beginning with a ``.`` are ignored.
 
 - The ``xref-rst-mode`` minor mode simply handles adding/removing the ``Xref`` back-end.
-
-
-
-Customization
-=============
-
-``rst-find-in-project-extensions`` (``'(".rst" ".txt")``)
-   A list of literal file extensions to search.
