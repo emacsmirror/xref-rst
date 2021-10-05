@@ -386,7 +386,9 @@ Return the blank text representing the indentation or nil if none is found."
     matches))
 
 (defun xref-rst--lookup-doc (current-project-root current-dir rst-role-data)
-  "Lookup the location of the 'doc' RST-ROLE-DATA using CURRENT-PROJECT-ROOT or CURRENT-DIR."
+  "Lookup the location of the 'doc' RST-ROLE-DATA.
+
+This is done relative to CURRENT-PROJECT-ROOT or CURRENT-DIR."
   (let*
     (
       (rst-filepath-no-ext
