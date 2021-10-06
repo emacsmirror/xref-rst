@@ -113,9 +113,11 @@
                   (eq col (current-column))))
               (setq last-pos (point)))
             (goto-char last-pos)
-            (if (< dir 0)
-              (setq beg (line-beginning-position))
-              (setq end (line-end-position)))))))
+            (cond
+              ((< dir 0)
+                (setq beg (line-beginning-position)))
+              (t
+                (setq end (line-end-position))))))))
     (cons beg end)))
 
 (defun xref-rst--find-next-indent-level-as-string (pos pos-end)
@@ -188,13 +190,15 @@ Return the blank text representing the indentation or nil if none is found."
               (current-indent (match-string-no-properties 1))
               (glossary-end-pos
                 (save-excursion
-                  (if
-                    (re-search-forward
-                      (concat "^" (xref-rst--maybe-char-regex current-indent) "[^[:blank:]\n]")
-                      nil
-                      t)
-                    (point)
-                    (point-max)))))
+                  (cond
+                    (
+                      (re-search-forward
+                        (concat "^" (xref-rst--maybe-char-regex current-indent) "[^[:blank:]\n]")
+                        nil
+                        t)
+                      (point))
+                    (t
+                      (point-max))))))
             (<= pos glossary-end-pos)))))))
 
 (defun xref-rst--regex-role-data-by-type (role-id)
@@ -330,13 +334,15 @@ Return the blank text representing the indentation or nil if none is found."
                 ;; `xref-rst--maybe-char-regex' is used to search for lower levels of indentation.
                 (glossary-end-pos
                   (save-excursion
-                    (if
-                      (re-search-forward
-                        (concat "^" (xref-rst--maybe-char-regex current-indent) "[^[:blank:]\n]")
-                        nil
-                        t)
-                      (point)
-                      (point-max))))
+                    (cond
+                      (
+                        (re-search-forward
+                          (concat "^" (xref-rst--maybe-char-regex current-indent) "[^[:blank:]\n]")
+                          nil
+                          t)
+                        (point))
+                      (t
+                        (point-max)))))
 
                 ;; Although this should never be nil, there is some small chance it could be
                 ;; if - for example there is odd mixing of tabs/spaces,
@@ -353,9 +359,11 @@ Return the blank text representing the indentation or nil if none is found."
                     ;; Fall back to any indent greater than the current indent
                     ;; while not perfect in that it may match the body text of the glossary,
                     ;; the chance it fails is very low, so it's not a bad fallback.
-                    (if next-indent
-                      (regexp-quote next-indent)
-                      (concat (regexp-quote current-indent) "[[:blank:]]+"))
+                    (cond
+                      (next-indent
+                        (regexp-quote next-indent))
+                      (t
+                        (concat (regexp-quote current-indent) "[[:blank:]]+")))
                     ;; End group.
                     "\\)"
                     ;; The term.
@@ -393,9 +401,11 @@ This is done relative to CURRENT-PROJECT-ROOT or CURRENT-DIR."
   (let*
     (
       (rst-filepath-no-ext
-        (if (string-equal "/" (substring rst-role-data 0 1))
-          (concat (file-name-as-directory current-project-root) (substring rst-role-data 1))
-          (concat (file-name-as-directory current-dir) rst-role-data 0 1)))
+        (cond
+          ((string-equal "/" (substring rst-role-data 0 1))
+            (concat (file-name-as-directory current-project-root) (substring rst-role-data 1)))
+          (t
+            (concat (file-name-as-directory current-dir) rst-role-data 0 1))))
       (rst-file-part (file-name-nondirectory rst-role-data))
       (rst-dir-part (file-name-directory rst-filepath-no-ext))
       (rst-files-test (directory-files rst-dir-part t (concat "^" (regexp-quote rst-file-part))))
@@ -471,9 +481,11 @@ This is done relative to CURRENT-PROJECT-ROOT or CURRENT-DIR."
                       current-dir
                       ;; Extract "file.rst" from "Some Title <file.rst>".
                       ;; if this syntax is used in index listings.
-                      (if (string-match "[[:blank:]]+<\\(.*\\)>[[:blank:]]*$" symbol)
-                        (match-string-no-properties 1 symbol)
-                        symbol))))
+                      (cond
+                        ((string-match "[[:blank:]]+<\\(.*\\)>[[:blank:]]*$" symbol)
+                          (match-string-no-properties 1 symbol))
+                        (t
+                          symbol)))))
                 (unless (file-exists-p rst-found-file)
                   (user-error
                     (concat error-prefix "not over an RST role or filename at the cursor")))
@@ -582,7 +594,7 @@ This is done relative to CURRENT-PROJECT-ROOT or CURRENT-DIR."
         (when symbol-context
           (pcase-let ((`(,symbol-buffer . ,symbol-point) symbol-context))
             (with-current-buffer symbol-buffer
-              (if (xref-rst--is-point-in-glossary-body symbol-point)
+              (when (xref-rst--is-point-in-glossary-body symbol-point)
                 (pcase-let
                   ((`(,beg . ,end) (xref-rst--range-of-block-at-current-indent symbol-point)))
                   (setq rst-terms-data
