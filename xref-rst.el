@@ -45,10 +45,11 @@
 ;; ---------------------------------------------------------------------------
 ;; Custom Variables
 
+(defgroup xref-rst nil "Cross-reference (XREF) support for reStructuredText." :group 'xref)
+
 ;; Most uses should convert into a REGEX using `xref-rst--file-match-regex'
 (defcustom xref-rst-extensions '(".rst" ".txt")
   "Extensions (must include the period character before the extension)."
-  :group 'rst-find-in-project
   :type '(repeat string))
 
 ;; We must match last or second last groups here, annoying,
