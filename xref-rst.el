@@ -393,7 +393,7 @@ This is done relative to CURRENT-PROJECT-ROOT or CURRENT-DIR."
           ((string-equal "/" (substring rst-role-data 0 1))
             (concat (file-name-as-directory current-project-root) (substring rst-role-data 1)))
           (t
-            (concat (file-name-as-directory current-dir) rst-role-data 0 1))))
+            (concat (file-name-as-directory current-dir) rst-role-data))))
       (rst-file-part (file-name-nondirectory rst-role-data))
       (rst-dir-part (file-name-directory rst-filepath-no-ext))
       (rst-files-test (directory-files rst-dir-part t (concat "^" (regexp-quote rst-file-part))))
