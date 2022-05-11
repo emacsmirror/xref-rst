@@ -4,7 +4,7 @@ XRef RST
 
 This package provides a reStructuredText back-end for Emacs ``Xref``.
 
-This means you can look-up links under the cursor as well as finding references to link targets.
+This means you can look-up links at the cursor as well as finding references to link-targets.
 
 Available via `melpa <https://melpa.org/#/xref-rst>`__.
 
@@ -21,7 +21,7 @@ Usage
 Once enabled, the following ``Xref`` functions can be used with RST files.
 
 ``xref-find-definitions``
-   Look up the symbol under the cursor.
+   Look up the symbol at the cursor.
 
    Supports ``ref``, ``term``, ``doc`` and file-paths (in an ``index`` for example).
 ``xref-find-references``
