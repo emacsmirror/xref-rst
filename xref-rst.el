@@ -17,8 +17,9 @@
 ;;; Usage:
 
 ;; ;; Enable the Xref back-end in RST mode.
-;; (add-hook 'rst-mode-hook (lambda ()
-;;   (add-hook 'xref-backend-functions #'xref-rst-xref-backend nil t)))
+;; (add-hook 'rst-mode-hook
+;;   (lambda ()
+;;     (xref-rst-mode)))
 
 ;;; Code:
 
