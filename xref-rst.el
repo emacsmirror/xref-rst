@@ -260,7 +260,7 @@ Return the blank text representing the indentation or nil if none is found."
 ;; Internal Functions (Find)
 
 (defun xref-rst--lookup-ref (current-project-root rst-role-data)
-  "Lookup the location of the 'ref' RST-ROLE-DATA in the CURRENT-PROJECT-ROOT."
+  "Lookup the location of the `ref' RST-ROLE-DATA in the CURRENT-PROJECT-ROOT."
   (let
     (
       (matches (list))
@@ -298,7 +298,7 @@ Return the blank text representing the indentation or nil if none is found."
     matches))
 
 (defun xref-rst--lookup-term (current-project-root rst-role-data)
-  "Lookup the location of the 'term' RST-ROLE-DATA in the CURRENT-PROJECT-ROOT."
+  "Lookup the location of the `term' RST-ROLE-DATA in the CURRENT-PROJECT-ROOT."
   (let
     (
       (matches (list))
@@ -384,7 +384,7 @@ Return the blank text representing the indentation or nil if none is found."
     matches))
 
 (defun xref-rst--lookup-doc (current-project-root current-dir rst-role-data)
-  "Lookup the location of the 'doc' RST-ROLE-DATA.
+  "Lookup the location of the `doc' RST-ROLE-DATA.
 
 This is done relative to CURRENT-PROJECT-ROOT or CURRENT-DIR."
   (let*
