@@ -34,9 +34,7 @@ This can be enabled using ``xref-rst-mode`` (a buffer-local minor-mode), for exa
 
 .. code-block:: elisp
 
-   (add-hook 'rst-mode-hook
-     (lambda ()
-       (xref-rst-mode)))
+   (add-hook 'rst-mode-hook #'xref-rst-mode)
 
 
 Customization
