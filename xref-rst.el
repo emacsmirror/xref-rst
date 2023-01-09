@@ -24,11 +24,11 @@
 ;;; Code:
 
 
-(require 'subr-x) ;; For `string-trim', `string-join'.
-(require 'thingatpt) ;; For `thing-at-point-looking-at'.
-(require 'vc) ;; For `vc-backend' and related functions.
-(require 'xref) ;; For `xref' integration.
-(require 'map) ;; For `map-elt'.
+(require 'subr-x) ; For `string-trim', `string-join'.
+(require 'thingatpt) ; For `thing-at-point-looking-at'.
+(require 'vc) ; For `vc-backend' and related functions.
+(require 'xref) ; For `xref' integration.
+(require 'map) ; For `map-elt'.
 
 
 ;; ---------------------------------------------------------------------------
@@ -254,7 +254,7 @@ Return the blank text representing the indentation or nil if none is found."
   "Lookup the location of the `ref' RST-ROLE-DATA in the CURRENT-PROJECT-ROOT."
   (let ((matches (list))
         (all-files
-         (let ((case-fold-search t)) ;; Case insensitive search.
+         (let ((case-fold-search t)) ; Case insensitive search.
            (xref-rst--dirs-recursive current-project-root))))
     (with-temp-buffer
       (setq buffer-undo-list t)
@@ -287,7 +287,7 @@ Return the blank text representing the indentation or nil if none is found."
   "Lookup the location of the `term' RST-ROLE-DATA in the CURRENT-PROJECT-ROOT."
   (let ((matches (list))
         (all-files
-         (let ((case-fold-search t)) ;; Case insensitive search.
+         (let ((case-fold-search t)) ; Case insensitive search.
            (xref-rst--dirs-recursive current-project-root))))
 
     (with-temp-buffer
@@ -298,52 +298,51 @@ Return the blank text representing the indentation or nil if none is found."
           (insert-file-contents rst-file-iter)
           (goto-char (point-min))
           (while (re-search-forward xref-rst--regex-glossary-directive nil t)
-            (let*
-                ( ;; Indent then term.
-                 (current-indent (match-string-no-properties 1))
+            (let* ((current-indent (match-string-no-properties 1)) ; Indent then term.
 
-                 ;; Find the end of this glossary directive.
-                 ;; This is done by finding the same indent level, or less indention.
-                 ;; `xref-rst--maybe-char-regex' is used to search for lower levels of indentation.
-                 (glossary-end-pos
-                  (save-excursion
-                    (cond
-                     ((re-search-forward (concat
-                                          "^"
-                                          (xref-rst--maybe-char-regex current-indent)
-                                          "[^[:blank:]\n]")
-                                         nil t)
-                      (point))
-                     (t
-                      (point-max)))))
+                   ;; Find the end of this glossary directive.
+                   ;; This is done by finding the same indent level, or less indention.
+                   ;; `xref-rst--maybe-char-regex' is used to search for
+                   ;; lower levels of indentation.
+                   (glossary-end-pos
+                    (save-excursion
+                      (cond
+                       ((re-search-forward (concat
+                                            "^"
+                                            (xref-rst--maybe-char-regex current-indent)
+                                            "[^[:blank:]\n]")
+                                           nil t)
+                        (point))
+                       (t
+                        (point-max)))))
 
-                 ;; Although this should never be nil, there is some small chance it could be
-                 ;; if - for example there is odd mixing of tabs/spaces,
-                 ;; so use a fallback if it can't be detected.
-                 (next-indent
-                  (xref-rst--find-next-indent-level-as-string (point) glossary-end-pos))
+                   ;; Although this should never be nil, there is some small chance it could be
+                   ;; if - for example there is odd mixing of tabs/spaces,
+                   ;; so use a fallback if it can't be detected.
+                   (next-indent
+                    (xref-rst--find-next-indent-level-as-string (point) glossary-end-pos))
 
-                 (term-regex
-                  (concat
-                   "^"
-                   ;; Match indentation.
-                   "\\("
-                   ;; The next indent level, be exact so we don't match any of the body text.
-                   ;;
-                   ;; Fall back to any indent greater than the current indent
-                   ;; while not perfect in that it may match the body text of the glossary,
-                   ;; the chance it fails is very low, so it's not a bad fallback.
-                   (cond
-                    (next-indent
-                     (regexp-quote next-indent))
-                    (t
-                     (concat (regexp-quote current-indent) "[[:blank:]]+")))
-                   ;; End group.
-                   "\\)"
-                   ;; The term.
-                   "\\(" (regexp-quote rst-role-data) "\\)"
-                   ;; Allow for keys (they're ignored, but support finding entries with keys).
-                   "\\([[:blank:]]*\\|[[:blank:]]+:[[:blank:]]+.*\\)$")))
+                   (term-regex
+                    (concat
+                     "^"
+                     ;; Match indentation.
+                     "\\("
+                     ;; The next indent level, be exact so we don't match any of the body text.
+                     ;;
+                     ;; Fall back to any indent greater than the current indent
+                     ;; while not perfect in that it may match the body text of the glossary,
+                     ;; the chance it fails is very low, so it's not a bad fallback.
+                     (cond
+                      (next-indent
+                       (regexp-quote next-indent))
+                      (t
+                       (concat (regexp-quote current-indent) "[[:blank:]]+")))
+                     ;; End group.
+                     "\\)"
+                     ;; The term.
+                     "\\(" (regexp-quote rst-role-data) "\\)"
+                     ;; Allow for keys (they're ignored, but support finding entries with keys).
+                     "\\([[:blank:]]*\\|[[:blank:]]+:[[:blank:]]+.*\\)$")))
 
               (when (re-search-forward term-regex glossary-end-pos t)
                 (let ((bol (line-beginning-position))
@@ -381,10 +380,9 @@ This is done relative to CURRENT-PROJECT-ROOT or CURRENT-DIR."
           (directory-files rst-dir-part t (concat "^" (regexp-quote rst-file-part))))
          (rst-filepath-found
           (catch 'result
-            (let
-                ( ;; Case insensitive extension comparison.
-                 (case-fold-search t)
-                 (rst-file-match-regex (xref-rst--file-match-regex)))
+            ;; Case insensitive extension comparison.
+            (let ((case-fold-search t)
+                  (rst-file-match-regex (xref-rst--file-match-regex)))
               (save-match-data
                 (dolist (rst-test rst-files-test)
                   (let ((rst-file-only (file-name-nondirectory rst-test)))
@@ -478,7 +476,7 @@ This is done relative to CURRENT-PROJECT-ROOT or CURRENT-DIR."
 
       (when rst-role-data
         (let ((all-files
-               (let ((case-fold-search t)) ;; Case insensitive search.
+               (let ((case-fold-search t)) ; Case insensitive search.
                  (xref-rst--dirs-recursive current-project-root))))
           (with-temp-buffer
             (setq buffer-undo-list t)
@@ -555,7 +553,7 @@ This is done relative to CURRENT-PROJECT-ROOT or CURRENT-DIR."
         (let ((rst-terms-data-regex
                (concat "\\(" (mapconcat #'regexp-quote rst-terms-data "\\|") "\\)"))
               (all-files
-               (let ((case-fold-search t)) ;; Case insensitive search.
+               (let ((case-fold-search t)) ; Case insensitive search.
                  (xref-rst--dirs-recursive current-project-root))))
 
           (with-temp-buffer
