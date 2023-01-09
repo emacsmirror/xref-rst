@@ -686,5 +686,8 @@ This is built from SYMBOL, FILE, LINE, COL and a raw LINE-TEXT result."
     (remove-hook 'xref-backend-functions #'xref-rst-xref-backend t))))
 
 (provide 'xref-rst)
-
+;; Local Variables:
+;; fill-column: 99
+;; indent-tabs-mode: nil
+;; End:
 ;;; xref-rst.el ends here
