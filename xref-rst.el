@@ -102,9 +102,9 @@
             (goto-char last-pos)
             (cond
              ((< dir 0)
-              (setq beg (line-beginning-position)))
+              (setq beg (pos-bol)))
              (t
-              (setq end (line-end-position))))))))
+              (setq end (pos-eol))))))))
     (cons beg end)))
 
 (defun xref-rst--find-next-indent-level-as-string (pos pos-end)
@@ -124,8 +124,8 @@ Return the blank text representing the indentation or nil if none is found."
                   ;; Don't read past this point.
                   (< (point) pos-end))
 
-        (let ((beg (line-beginning-position))
-              (end (line-end-position)))
+        (let ((beg (pos-bol))
+              (end (pos-eol)))
 
           ;; Skip blank lines.
           (unless (string-match-p "^[[:blank:]]*$" (buffer-substring-no-properties beg end))
@@ -163,9 +163,9 @@ Return the blank text representing the indentation or nil if none is found."
       (goto-char pos)
       (when (re-search-backward xref-rst--regex-glossary-directive nil t)
         ;; Ensure we're not on the glossary line.
-        (when (> pos (line-end-position))
+        (when (> pos (pos-eol))
           (forward-line 1)
-          (goto-char (line-beginning-position))
+          (goto-char (pos-bol))
           (let* ((current-indent (match-string-no-properties 1))
                  (glossary-end-pos
                   (save-excursion
@@ -265,8 +265,8 @@ Return the blank text representing the indentation or nil if none is found."
           (goto-char (point-min))
           (while (re-search-forward xref-rst--regex-ref-declare nil t)
             (when (string-equal rst-role-data (match-string-no-properties 2))
-              (let ((bol (line-beginning-position))
-                    (eol (line-end-position)))
+              (let ((bol (pos-bol))
+                    (eol (pos-eol)))
 
                 (push (xref-rst--candidate
                        ;; Symbol.
@@ -345,8 +345,8 @@ Return the blank text representing the indentation or nil if none is found."
                      "\\([[:blank:]]*\\|[[:blank:]]+:[[:blank:]]+.*\\)$")))
 
               (when (re-search-forward term-regex glossary-end-pos t)
-                (let ((bol (line-beginning-position))
-                      (eol (line-end-position)))
+                (let ((bol (pos-bol))
+                      (eol (pos-eol)))
                   (push (xref-rst--candidate
                          ;; Symbol.
                          rst-role-data
@@ -489,8 +489,8 @@ This is done relative to CURRENT-PROJECT-ROOT or CURRENT-DIR."
                   (when (string-equal
                          rst-role-data
                          (or (match-string-no-properties 1) (match-string-no-properties 2)))
-                    (let ((bol (line-beginning-position))
-                          (eol (line-end-position)))
+                    (let ((bol (pos-bol))
+                          (eol (pos-eol)))
                       (push (xref-make
                              ;; Display text.
                              (buffer-substring-no-properties bol eol)
@@ -567,8 +567,8 @@ This is done relative to CURRENT-PROJECT-ROOT or CURRENT-DIR."
                   (when (string-match-p
                          rst-terms-data-regex
                          (or (match-string-no-properties 1) (match-string-no-properties 2)))
-                    (let ((bol (line-beginning-position))
-                          (eol (line-end-position)))
+                    (let ((bol (pos-bol))
+                          (eol (pos-eol)))
 
                       (push (xref-make
                              ;; Display text.
