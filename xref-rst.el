@@ -231,8 +231,7 @@ Return the blank text representing the indentation or nil if none is found."
                                  (lambda (dir)
                                    (not
                                     (string-equal
-                                     "."
-                                     (substring (file-name-nondirectory dir) 0 1)))))))
+                                     "." (substring (file-name-nondirectory dir) 0 1)))))))
 
 (defun xref-rst--project-vars (error-prefix)
   "Access project with ERROR-PREFIX for any errors."
@@ -527,11 +526,8 @@ This is done relative to CURRENT-PROJECT-ROOT or CURRENT-DIR."
             (user-error
              (concat
               error-prefix
-              (format
-               "could not find any references to %S under %S within %d files!"
-               rst-role-data
-               current-project-root
-               (length all-files))))))
+              (format "could not find any references to %S under %S within %d files!"
+                      rst-role-data current-project-root (length all-files))))))
 
         ;; Show collected Xref list.
         xrefs))))
@@ -606,11 +602,8 @@ This is done relative to CURRENT-PROJECT-ROOT or CURRENT-DIR."
               (user-error
                (concat
                 error-prefix
-                (format
-                 "could not find any references to %S under %S within %d files!"
-                 rst-terms-data
-                 current-project-root
-                 (length all-files)))))))
+                (format "could not find any references to %S under %S within %d files!"
+                        rst-terms-data current-project-root (length all-files)))))))
 
         ;; Show collected Xref list.
         xrefs))))
@@ -657,9 +650,7 @@ This is built from SYMBOL, FILE, LINE, COL and a raw LINE-TEXT result."
   (xref-make
    (map-elt candidate 'match)
    (xref-make-file-location
-    (map-elt candidate 'file)
-    (map-elt candidate 'line)
-    (map-elt candidate 'column))))
+    (map-elt candidate 'file) (map-elt candidate 'line) (map-elt candidate 'column))))
 
 
 ;; ---------------------------------------------------------------------------
