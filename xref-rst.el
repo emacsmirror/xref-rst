@@ -696,5 +696,6 @@ This is built from SYMBOL, FILE, LINE, COL and a raw LINE-TEXT result."
 ;; Local Variables:
 ;; fill-column: 99
 ;; indent-tabs-mode: nil
+;; elisp-autofmt-load-packages-local: ("xref")
 ;; End:
 ;;; xref-rst.el ends here
