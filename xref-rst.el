@@ -554,12 +554,14 @@ This is done relative to CURRENT-PROJECT-ROOT or CURRENT-DIR."
                 (pcase-let ((`(,beg . ,end)
                              (xref-rst--range-of-block-at-current-indent symbol-point)))
                   (setq rst-terms-data
-                        (mapcar
-                         (lambda (str)
-                           (string-trim
-                            ;; Ignore the "key".
-                            (car (split-string str ":"))))
-                         (split-string (buffer-substring-no-properties beg end) "\n")))))))))
+                        ;; Split string modifies match-data.
+                        (save-match-data
+                          (mapcar
+                           (lambda (str)
+                             (string-trim
+                              ;; Ignore the "key".
+                              (car (split-string str ":"))))
+                           (split-string (buffer-substring-no-properties beg end) "\n"))))))))))
 
       (when rst-terms-data
         (let ((rst-terms-data-regex
