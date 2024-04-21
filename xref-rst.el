@@ -86,6 +86,7 @@
 
 (defun xref-rst--range-of-block-at-current-indent (pos)
   "Return the beginning/end point of lines at the indentation level of POS."
+  (declare (important-return-value t))
   (let ((beg nil)
         (end nil))
     (save-excursion
@@ -111,6 +112,7 @@
   "Find the next indent level at POS, that does not exceed POS-END.
 
 Return the blank text representing the indentation or nil if none is found."
+  (declare (important-return-value t))
   (save-excursion
     (goto-char pos)
     (back-to-indentation)
@@ -147,6 +149,7 @@ Return the blank text representing the indentation or nil if none is found."
 
 (defun xref-rst--maybe-char-regex (str)
   "Return a regex for STR where each character is optionally matched."
+  (declare (important-return-value t))
   (let ((regex-list (list)))
     (dotimes (i (length str))
       (push (concat "\\(?:" (regexp-quote (char-to-string (aref str i))) "\\)?") regex-list))
@@ -158,6 +161,7 @@ Return the blank text representing the indentation or nil if none is found."
 
 (defun xref-rst--is-point-in-glossary-body (pos)
   "Return t if POS is within the glossary body."
+  (declare (important-return-value t))
   (save-match-data
     (save-excursion
       (goto-char pos)
@@ -182,6 +186,7 @@ Return the blank text representing the indentation or nil if none is found."
 
 (defun xref-rst--regex-role-data-by-type (role-id)
   "Return the regular expression to match ROLE-ID."
+  (declare (important-return-value t))
   (concat
    ":" role-id ":`"
    ;; Start group, only for "OR".
@@ -198,6 +203,7 @@ Return the blank text representing the indentation or nil if none is found."
 
 (defun xref-rst--file-match-regex ()
   "Return `xref-rst-extensions' as a file matching REGEX."
+  (declare (important-return-value t))
   ;; Converts:
   ;;    '(".rst" ".txt")
   ;; Into:
@@ -208,6 +214,7 @@ Return the blank text representing the indentation or nil if none is found."
 
 (defun xref-rst--dirs-recursive (root)
   "Recursively scan ROOT for RST files."
+  (declare (important-return-value t))
   (let ((rst-file-match-regex (xref-rst--file-match-regex)))
     (directory-files-recursively root rst-file-match-regex
                                  nil
@@ -219,6 +226,7 @@ Return the blank text representing the indentation or nil if none is found."
 
 (defun xref-rst--project-vars (error-prefix)
   "Access project with ERROR-PREFIX for any errors."
+  (declare (important-return-value t))
   (let* ((buf
           (or (current-buffer)
               (user-error (concat error-prefix "current buffer not found, exiting!"))))
@@ -251,6 +259,7 @@ Return the blank text representing the indentation or nil if none is found."
 
 (defun xref-rst--lookup-ref (current-project-root rst-role-data)
   "Lookup the location of the `ref' RST-ROLE-DATA in the CURRENT-PROJECT-ROOT."
+  (declare (important-return-value t))
   (let ((matches (list))
         (all-files
          (let ((case-fold-search t)) ; Case insensitive search.
@@ -284,6 +293,7 @@ Return the blank text representing the indentation or nil if none is found."
 
 (defun xref-rst--lookup-term (current-project-root rst-role-data)
   "Lookup the location of the `term' RST-ROLE-DATA in the CURRENT-PROJECT-ROOT."
+  (declare (important-return-value t))
   (let ((matches (list))
         (all-files
          (let ((case-fold-search t)) ; Case insensitive search.
@@ -367,6 +377,7 @@ Return the blank text representing the indentation or nil if none is found."
   "Lookup the location of the `doc' RST-ROLE-DATA.
 
 This is done relative to CURRENT-PROJECT-ROOT or CURRENT-DIR."
+  (declare (important-return-value t))
   (let* ((rst-filepath-no-ext
           (cond
            ((string-equal "/" (substring rst-role-data 0 1))
@@ -401,6 +412,7 @@ This is done relative to CURRENT-PROJECT-ROOT or CURRENT-DIR."
 
 (defun xref-rst--find-definitions-impl (symbol)
   "Lookup SYMBOL, returning a list of matching items from `xref-rst--candidate'."
+  (declare (important-return-value t))
   (let ((error-prefix "RST-reference: ")
         (matches (list)))
     (pcase-let ((`(,current-project-root ,current-dir ,_current-filepath)
@@ -456,6 +468,7 @@ This is done relative to CURRENT-PROJECT-ROOT or CURRENT-DIR."
 
 (defun xref-rst--find-references-to-ref (symbol)
   "Lookup references to SYMBOL using the :ref: role."
+  (declare (important-return-value t))
 
   (let ((error-prefix "RST-reference-usage: ")
         (xrefs (list))
@@ -519,6 +532,7 @@ This is done relative to CURRENT-PROJECT-ROOT or CURRENT-DIR."
 
 (defun xref-rst--find-references-to-term (symbol)
   "Lookup references to SYMBOL using the :term: role."
+  (declare (important-return-value t))
 
   (let ((error-prefix "RST-term-usage: ")
         (xrefs (list))
@@ -596,6 +610,7 @@ This is done relative to CURRENT-PROJECT-ROOT or CURRENT-DIR."
 
 (defun xref-rst--find-references-impl (symbol)
   "Show usages of SYMBOL."
+  (declare (important-return-value t))
   (let ((xrefs (list)))
 
     (cond
@@ -622,6 +637,7 @@ This is done relative to CURRENT-PROJECT-ROOT or CURRENT-DIR."
 (defun xref-rst--candidate (symbol file line col line-text)
   "Return a candidate association-list.
 This is built from SYMBOL, FILE, LINE, COL and a raw LINE-TEXT result."
+  (declare (important-return-value t))
   (list
    (cons 'file file)
    (cons 'line line)
@@ -633,6 +649,7 @@ This is built from SYMBOL, FILE, LINE, COL and a raw LINE-TEXT result."
 ;; Use for finding links to this item.
 (defun xref-rst--make-xref (candidate)
   "Return a new Xref object built from CANDIDATE."
+  (declare (important-return-value t))
   (xref-make
    (map-elt candidate 'match)
    (xref-make-file-location
@@ -664,6 +681,7 @@ This is built from SYMBOL, FILE, LINE, COL and a raw LINE-TEXT result."
 
 (defun xref-rst-xref-backend ()
   "Xref-RST back-end for Xref."
+  (declare (important-return-value t))
   'xref-rst)
 
 ;;;###autoload
